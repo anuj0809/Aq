@@ -1,0 +1,68 @@
+<html>
+<head>
+<title>Upload and Play Audio</title>
+<style>
+audio {
+  width: 100%;
+}
+.card {
+    /* Add shadows to create the "card" effect */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+  }
+  
+  /* On mouse-over, add a deeper shadow */
+  .card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  }
+  
+  /* Add some padding inside the card container */
+  .container {
+    padding: 2px 16px;
+  }
+</style>
+</head>
+<body>
+<h1>Upload and Play Audio</h1>
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" id="file" name="file"  multiple />
+    <br>
+    <br>
+    <button type="submit"  value="Submit">Submit</button>
+</form>
+
+{% if  messages%}
+    {% for msg in messages %}
+        {{msg}}
+    {% endfor %}
+{% endif %}
+<br>
+<br>
+<br>
+<br>
+{% for data in datas %}
+    <div class="card">
+        <p>File Name :- {{data.audio_name}}</p>
+        <p>File Size :- {{data.audio_size}} bytes</p>
+        <p>File Upload Date :- {{data.audio_upload_date}}</p>
+        <p>File Extension :- {{data.audio_extension}}</p>
+        <p>File length :- {{data.audio_length}}</p>
+        <audio id="audioPlayer" controls>
+        <source src="{{data.audio_file}}" />
+        </audio>
+    </div>
+{% endfor %}
+
+
+<script>
+var audioFile = document.getElementById("audioFile");
+var audioPlayer = document.getElementById("audioPlayer");
+
+audioFile.addEventListener("change", function() {
+  var file = audioFile.files[0];
+  audioPlayer.src = file.url;
+});
+</script>
+</body>
+</html>
